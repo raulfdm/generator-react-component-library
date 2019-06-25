@@ -4,6 +4,9 @@ node_js:
   - 8
   - 6
 
+script:
+  - commitlint-travis
+
 jobs:
   include:
     # Define the release stage that runs semantic-release
