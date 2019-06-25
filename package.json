@@ -1,6 +1,6 @@
 {
   "name": "generator-react-component-library",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "main": "index.js",
   "license": "MIT",
   "files": [
@@ -9,7 +9,30 @@
   "keywords": [
     "yeoman-generator"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raulfdm/generator-react-component-library.git"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
   "dependencies": {
     "yeoman-generator": "^4.0.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "@commitlint/travis-cli": "^8.0.0",
+    "@semantic-release/commit-analyzer": "^6.2.0",
+    "@semantic-release/git": "^7.0.13",
+    "@semantic-release/npm": "^5.1.11",
+    "@semantic-release/release-notes-generator": "^7.2.0",
+    "husky": "^2.5.0",
+    "semantic-release": "^15.13.17"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
