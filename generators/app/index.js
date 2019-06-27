@@ -1,11 +1,19 @@
 const Generator = require("yeoman-generator");
 const packageJson = require("./resources/packageJson");
 
+const { NPM_CHOICE, YARN_CHOICE } = require("./constants");
+
 module.exports = class extends Generator {
   install() {
-    this.yarnInstall(undefined, undefined, {
-      cwd: this._destinationPathGenerator()
-    });
+    if (this.answers.pkgManager === YARN_CHOICE) {
+      this.yarnInstall(undefined, undefined, {
+        cwd: this._destinationPathGenerator()
+      });
+    } else {
+      this.npmInstall(undefined, undefined, {
+        cwd: this._destinationPathGenerator()
+      });
+    }
   }
 
   _destinationPathGenerator(path = "") {
@@ -52,6 +60,12 @@ module.exports = class extends Generator {
         type: "input",
         name: "name",
         message: "Your project name"
+      },
+      {
+        type: "list",
+        name: "pkgManager",
+        message: "What package manager do you want to use?",
+        choices: [YARN_CHOICE, NPM_CHOICE]
       }
     ]);
   }
