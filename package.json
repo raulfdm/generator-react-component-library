@@ -14,7 +14,9 @@
     "url": "https://github.com/raulfdm/generator-react-component-library.git"
   },
   "scripts": {
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "test": "jest generators/**/*.test.js",
+    "test:w": "yarn test --watch"
   },
   "dependencies": {
     "yeoman-generator": "^4.0.1"
@@ -27,8 +29,16 @@
     "@semantic-release/git": "^7.0.13",
     "@semantic-release/npm": "^5.1.11",
     "@semantic-release/release-notes-generator": "^7.2.0",
-    "husky": "^2.5.0",
-    "semantic-release": "^15.13.17"
+    "@types/jest": "^24.0.15",
+    "fs-extra": "^8.0.1",
+    "husky": "^2.7.0",
+    "jest": "^24.8.0",
+    "prettier": "1.18.2",
+    "pretty-quick": "^1.11.1",
+    "rimraf": "^2.6.3",
+    "semantic-release": "^15.13.17",
+    "yeoman-assert": "^3.1.1",
+    "yeoman-test": "^2.0.0"
   },
   "husky": {
     "hooks": {
