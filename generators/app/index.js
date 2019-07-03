@@ -1,72 +1,101 @@
-const Generator = require("yeoman-generator");
-const packageJson = require("./resources/packageJson");
+const Generator = require('yeoman-generator');
+const { merge } = require('lodash');
 
-const { NPM_CHOICE, YARN_CHOICE } = require("./constants");
+const { NPM_CHOICE, YARN_CHOICE } = require('./resources/constants');
+
+const { JEST_ENZYME } = require('../testing/resources/constants');
+
+const scaffoldPkgJson = require('../scaffold/resources/packageJson');
+const testingPkgJson = require('../testing/resources/packageJson');
 
 module.exports = class extends Generator {
-  install() {
-    if (this.answers.pkgManager === YARN_CHOICE) {
-      this.yarnInstall(undefined, undefined, {
-        cwd: this._destinationPathGenerator()
-      });
-    } else {
-      this.npmInstall(undefined, undefined, {
-        cwd: this._destinationPathGenerator()
-      });
-    }
+  async prompting() {
+    await this._askFor();
   }
 
-  _destinationPathGenerator(path = "") {
-    return this.destinationPath(`${this.answers.name}/${path}`);
+  configuring() {
+    /* Will be available via props to others generators */
+    this.props.generateDestPath = this._generateDestPath.bind(this);
+  }
+
+  default() {
+    this.composeWith(require.resolve('../scaffold'), this.props);
+
+    if (this.props.tester) {
+      this.composeWith(require.resolve('../testing'), this.props);
+    }
   }
 
   writing() {
-    const rootFiles = [
-      ".editorconfig",
-      ".eslintrc.js",
-      ".gitignore",
-      "rollup.config.js",
-      "babel.config.js"
-    ];
+    const pkg = {
+      name: this.props.name,
+      description: this.props.description || `${this.props.name}'s library`,
+    };
 
-    function generateRootFiles(file) {
-      this.fs.copy(
-        this.templatePath(file),
-        this._destinationPathGenerator(file)
-      );
+    let nextPkg = merge(pkg, scaffoldPkgJson);
+
+    if (this.props.tester) {
+      nextPkg = merge(nextPkg, testingPkgJson[this.props.tester]);
     }
 
-    rootFiles.forEach(generateRootFiles.bind(this));
-
-    this.fs.copy(
-      this.templatePath("src/"),
-      this._destinationPathGenerator("./src/")
-    );
-
-    const pkgContent = packageJson({
-      appName: this.answers.name,
-      description: this.answers.description || `${this.answers.name}'s library`
-    });
-
-    this.fs.extendJSON(
-      this._destinationPathGenerator("package.json"),
-      pkgContent
-    );
+    this.fs.extendJSON(this._generateDestPath('package.json'), nextPkg);
   }
 
-  async prompting() {
-    this.answers = await this.prompt([
+  install() {
+    const installer =
+      this.props.pkgManager === YARN_CHOICE
+        ? this.yarnInstall.bind(this)
+        : this.npmInstall.bind(this);
+
+    installer(undefined, undefined, {
+      cwd: this._generateDestPath(),
+    });
+  }
+
+  /* Internals */
+  _askFor() {
+    const prompts = [
       {
-        type: "input",
-        name: "name",
-        message: "Your project name"
+        type: 'input',
+        name: 'name',
+        message: 'Your project name',
+        /* @TODO: Add validate to avoid empty string */
       },
       {
-        type: "list",
-        name: "pkgManager",
-        message: "What package manager do you want to use?",
-        choices: [YARN_CHOICE, NPM_CHOICE]
-      }
-    ]);
+        type: 'input',
+        name: 'descriptions',
+        message: 'Some project description',
+      },
+      {
+        type: 'list',
+        name: 'pkgManager',
+        message: 'What package manager do you want to use?',
+        choices: [YARN_CHOICE, NPM_CHOICE],
+      },
+      {
+        type: 'list',
+        name: 'tester',
+        message: 'What library do you want to use to test?',
+        default: 'none',
+        choices: [
+          {
+            name: 'Jest + Enzyme',
+            value: JEST_ENZYME,
+          },
+          {
+            name: 'None',
+            value: '',
+          },
+        ],
+      },
+    ];
+
+    return this.prompt(prompts).then(props => {
+      this.props = merge(this.props, props);
+    });
+  }
+
+  _generateDestPath(path = '') {
+    return this.destinationPath(`${this.props.name}/${path}`);
   }
 };
