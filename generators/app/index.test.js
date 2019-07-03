@@ -8,7 +8,7 @@ const glob = require('glob');
 
 const promiseGlob = promisify(glob);
 
-const { ROOT_FILES } = require('./resources/constants');
+const { ROOT_FILES } = require('../scaffold/resources/constants');
 
 const clearTmpDir = () => {
   rimraf.sync(TMP_PATH);
@@ -18,6 +18,7 @@ const TMP_PATH = path.join(__dirname, '../../tmp');
 
 const generateDistPath = file => path.join(TMP_PATH, file);
 
+/* @TODO: Break this tests into each generator */
 describe('React Component Library Generator', () => {
   describe('Simple setup', () => {
     beforeEach(() => {

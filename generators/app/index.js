@@ -1,100 +1,70 @@
 const Generator = require('yeoman-generator');
-const packageJson = require('./resources/packageJson');
+const { merge } = require('lodash');
 
-const {
-  NPM_CHOICE,
-  YARN_CHOICE,
-  ROOT_FILES,
-} = require('./resources/constants');
+const { NPM_CHOICE, YARN_CHOICE } = require('./resources/constants');
 
-const jestData = require('./resources/jestData');
+const { JEST_ENZYME } = require('../testing/resources/constants');
+
+const scaffoldPkgJson = require('../scaffold/resources/packageJson');
+const testingPkgJson = require('../testing/resources/packageJson');
 
 module.exports = class extends Generator {
+  async prompting() {
+    await this._askFor();
+  }
+
+  configuring() {
+    /* Will be available via props to others generators */
+    this.props.generateDestPath = this._generateDestPath.bind(this);
+  }
+
+  default() {
+    this.composeWith(require.resolve('../scaffold'), this.props);
+
+    if (this.props.tester) {
+      this.composeWith(require.resolve('../testing'), this.props);
+    }
+  }
+
+  writing() {
+    const pkg = {
+      name: this.props.name,
+      description: this.props.description || `${this.props.name}'s library`,
+    };
+
+    let nextPkg = merge(pkg, scaffoldPkgJson);
+
+    if (this.props.tester) {
+      nextPkg = merge(nextPkg, testingPkgJson[this.props.tester]);
+    }
+
+    this.fs.extendJSON(this._generateDestPath('package.json'), nextPkg);
+  }
+
   install() {
     const installer =
-      this.answers.pkgManager === YARN_CHOICE
+      this.props.pkgManager === YARN_CHOICE
         ? this.yarnInstall.bind(this)
         : this.npmInstall.bind(this);
 
     installer(undefined, undefined, {
-      cwd: this._destinationPathGenerator(),
+      cwd: this._generateDestPath(),
     });
   }
 
-  _destinationPathGenerator(path = '') {
-    return this.destinationPath(`${this.answers.name}/${path}`);
-  }
-
-  writing() {
-    function generateRootFiles(file) {
-      this.fs.copy(
-        this.templatePath(file),
-        this._destinationPathGenerator(file),
-      );
-    }
-
-    const pkgContent = {
-      appName: this.answers.name,
-      description: this.answers.description || `${this.answers.name}'s library`,
-      scripts: {},
-      dependencies: {},
-      devDependencies: {},
-    };
-
-    ROOT_FILES.forEach(generateRootFiles.bind(this));
-
-    this.fs.copy(
-      this.templatePath('src/**/*'),
-      this._destinationPathGenerator('./src/'),
-    );
-
-    if (this.answers.tester === 'enzyme') {
-      this._copyJest();
-
-      pkgContent.scripts = {
-        ...pkgContent.scripts,
-        ...jestData.scripts,
-      };
-
-      pkgContent.devDependencies = {
-        ...pkgContent.devDependencies,
-        ...jestData.devDependencies,
-      };
-    }
-
-    this.fs.extendJSON(
-      this._destinationPathGenerator('package.json'),
-      packageJson(pkgContent),
-    );
-  }
-
-  _copyJest() {
-    this.fs.copy(
-      this.templatePath('jest/babel.config.js'),
-      this._destinationPathGenerator('./babel.config.js'),
-    );
-    this.fs.copy(
-      this.templatePath('jest/Button.test.js'),
-      this._destinationPathGenerator('./src/Button/Button.test.js'),
-    );
-
-    this.fs.copy(
-      this.templatePath('jest/jest.config.js'),
-      this._destinationPathGenerator('./jest.config.js'),
-    );
-
-    this.fs.copy(
-      this.templatePath('jest/setupTest.js'),
-      this._destinationPathGenerator('./config/setupTest.js'),
-    );
-  }
-
-  async prompting() {
-    this.answers = await this.prompt([
+  /* Internals */
+  _askFor() {
+    const prompts = [
       {
         type: 'input',
         name: 'name',
         message: 'Your project name',
+        /* @TODO: Add validate to avoid empty string */
+      },
+      {
+        type: 'input',
+        name: 'descriptions',
+        message: 'Some project description',
       },
       {
         type: 'list',
@@ -110,14 +80,22 @@ module.exports = class extends Generator {
         choices: [
           {
             name: 'Jest + Enzyme',
-            value: 'enzyme',
+            value: JEST_ENZYME,
           },
           {
             name: 'None',
-            value: 'none',
+            value: '',
           },
         ],
       },
-    ]);
+    ];
+
+    return this.prompt(prompts).then(props => {
+      this.props = merge(this.props, props);
+    });
+  }
+
+  _generateDestPath(path = '') {
+    return this.destinationPath(`${this.props.name}/${path}`);
   }
 };
