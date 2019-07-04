@@ -7,6 +7,7 @@ const { JEST_ENZYME } = require('../testing/resources/constants');
 
 const scaffoldPkgJson = require('../scaffold/resources/packageJson');
 const testingPkgJson = require('../testing/resources/packageJson');
+const storybookPkgJson = require('../storybook/resources/packageJson');
 
 module.exports = class extends Generator {
   async prompting() {
@@ -24,6 +25,10 @@ module.exports = class extends Generator {
     if (this.props.tester) {
       this.composeWith(require.resolve('../testing'), this.props);
     }
+
+    if (this.props.storybook) {
+      this.composeWith(require.resolve('../storybook'), this.props);
+    }
   }
 
   writing() {
@@ -36,6 +41,10 @@ module.exports = class extends Generator {
 
     if (this.props.tester) {
       nextPkg = merge(nextPkg, testingPkgJson[this.props.tester]);
+    }
+
+    if (this.props.storybook) {
+      nextPkg = merge(nextPkg, storybookPkgJson);
     }
 
     this.fs.extendJSON(this._generateDestPath('package.json'), nextPkg);
@@ -87,6 +96,11 @@ module.exports = class extends Generator {
             value: '',
           },
         ],
+      },
+      {
+        type: 'confirm',
+        name: 'storybook',
+        message: 'Do you want to add storybook?',
       },
     ];
 
