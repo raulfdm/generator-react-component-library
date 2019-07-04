@@ -28,7 +28,7 @@ describe('React Component Library Generator', () => {
         .withPrompts({ name: 'tmp' });
     });
 
-    afterEach(clearTmpDir);
+    afterAll(clearTmpDir);
 
     it('copy all root files file', () => {
       const files = ROOT_FILES.map(generateDistPath);
@@ -69,7 +69,7 @@ describe('React Component Library Generator', () => {
         .withPrompts({ name: 'tmp', tester: 'enzyme' });
     });
 
-    afterEach(clearTmpDir);
+    afterAll(clearTmpDir);
 
     it('copy all root files file', () => {
       const files = ROOT_FILES.map(generateDistPath);
