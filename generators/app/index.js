@@ -1,5 +1,5 @@
 const Generator = require('yeoman-generator');
-const { merge } = require('lodash');
+const { merge, isEmpty } = require('lodash');
 
 const { NPM_CHOICE, YARN_CHOICE } = require('./resources/constants');
 
@@ -68,7 +68,11 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'name',
         message: 'Your project name',
-        /* @TODO: Add validate to avoid empty string */
+        validate(input) {
+          return new Promise((resolve, reject) =>
+            isEmpty(input) ? reject('Project name is required') : resolve(true),
+          );
+        },
       },
       {
         type: 'input',
