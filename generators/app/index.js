@@ -3,7 +3,10 @@ const { merge, isEmpty } = require('lodash');
 
 const { NPM_CHOICE, YARN_CHOICE } = require('./resources/constants');
 
-const { JEST_ENZYME } = require('../testing/resources/constants');
+const {
+  JEST_ENZYME,
+  TESTING_LIBRARY,
+} = require('../testing/resources/constants');
 
 const scaffoldPkgJson = require('../scaffold/resources/packageJson');
 const testingPkgJson = require('../testing/resources/packageJson');
@@ -94,6 +97,10 @@ module.exports = class extends Generator {
           {
             name: 'Jest + Enzyme',
             value: JEST_ENZYME,
+          },
+          {
+            name: 'Jest + React Testing Library',
+            value: TESTING_LIBRARY,
           },
           {
             name: 'None',
