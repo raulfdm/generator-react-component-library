@@ -1,17 +1,13 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['standard', 'standard-react'],
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   env: {
-    es6: true,
-  },
-  plugins: ['react'],
-  parserOptions: {
-    sourceType: 'module',
-  },
-  rules: {
-    // don't force es6 functions to include space before paren
-    'space-before-function-paren': 0,
-    // allow specifying true explicitly for boolean props
-    'react/jsx-boolean-value': 0,
+    browser: true,
+    node: true,
   },
 };

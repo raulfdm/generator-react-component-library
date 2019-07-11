@@ -7,4 +7,8 @@ const Button = props => {
   return <button {...props} />;
 };
 
+Button.propTypes = {
+  className: PropTypes.string,
+};
+
 export default Button;
