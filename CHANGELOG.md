@@ -1,5 +1,12 @@
 CHANGELOG
 
+## [1.5.1](https://github.com/raulfdm/generator-react-component-library/compare/v1.5.0...v1.5.1) (2019-08-07)
+
+
+### Bug Fixes
+
+* update scaffolding dependencies version (minor/path) ([c9f556a](https://github.com/raulfdm/generator-react-component-library/commit/c9f556a))
+
 # [1.5.0](https://github.com/raulfdm/generator-react-component-library/compare/v1.4.1...v1.5.0) (2019-07-11)
 
 ### Bug Fixes
