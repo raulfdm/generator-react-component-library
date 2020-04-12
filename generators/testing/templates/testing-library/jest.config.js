@@ -1,8 +1,4 @@
 module.exports = {
-  setupFilesAfterEnv: ['@testing-library/react/cleanup-after-each'],
-  transform: {
-    '^.+\\.js$': 'babel-jest',
-  },
   /* It solves css/less/scss import issues.
     You might have similar issues with different file extensions (e.g. md).
     Just search for "<file type> jest loader"
