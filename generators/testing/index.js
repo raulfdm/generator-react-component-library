@@ -13,7 +13,6 @@ module.exports = class extends Generator {
   }
 
   /* Internals */
-
   _copyTestingLibrary() {
     this.fs.copy(
       this.templatePath('./testing-library/babel.config.js'),
