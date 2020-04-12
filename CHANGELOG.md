@@ -1,5 +1,12 @@
 CHANGELOG
 
+## [1.5.2](https://github.com/raulfdm/generator-react-component-library/compare/v1.5.1...v1.5.2) (2020-02-22)
+
+
+### Bug Fixes
+
+* add jest to eslint envs ([d77f8d5](https://github.com/raulfdm/generator-react-component-library/commit/d77f8d5))
+
 ## [1.5.1](https://github.com/raulfdm/generator-react-component-library/compare/v1.5.0...v1.5.1) (2019-08-07)
 
 
