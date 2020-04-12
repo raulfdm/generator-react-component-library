@@ -40,7 +40,7 @@ module.exports = class extends Generator {
     let nextPkg = merge(pkg, scaffoldPkgJson);
 
     if (this.props.tester) {
-      nextPkg = merge(nextPkg, testingPkgJson[this.props.tester]);
+      nextPkg = merge(nextPkg, testingPkgJson);
     }
 
     if (this.props.storybook) {
