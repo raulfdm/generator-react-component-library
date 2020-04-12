@@ -1,5 +1,5 @@
 const { merge } = require('lodash');
-const { JEST_ENZYME, TESTING_LIBRARY } = require('./constants');
+const { TESTING_LIBRARY } = require('./constants');
 
 const common = {
   devDependencies: {
@@ -14,13 +14,6 @@ const common = {
 };
 
 module.exports = {
-  [JEST_ENZYME]: merge(common, {
-    devDependencies: {
-      'enzyme-adapter-react-16': '^1.15.2',
-      enzyme: '^3.11.0',
-      'jest-enzyme': '^7.1.2',
-    },
-  }),
   [TESTING_LIBRARY]: merge(common, {
     devDependencies: {
       '@testing-library/react': '^10.0.2',

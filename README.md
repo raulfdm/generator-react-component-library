@@ -8,21 +8,23 @@
 
 ## Table of Content
 
-- [Why](#why)
-- [Usage](#usage)
-- [Dependencies](#dependencies)
-- [Folder Structure Explained](#folder-structure-explained)
-- [Options Explained](#options-explained)
-  - [Package Manager](#package-manager)
-  - [Tester](#tester)
-  - [Storybook](#storybook)
-  - [Sass](#sass)
-- [Publish Process](#publish-process)
-  - [Quick explanation](#quick-explanation)
-  - [Publishing](#publishing)
-- [Run locally](#run-locally)
-- [Questions and Comments](#questions-and-comments)
-- [License](#license)
+- [React Component Library Generator](#react-component-library-generator)
+  - [Table of Content](#table-of-content)
+  - [Why](#why)
+  - [Usage](#usage)
+  - [Dependencies](#dependencies)
+  - [Folder Structure Explained](#folder-structure-explained)
+  - [Options explained](#options-explained)
+    - [Package Manager](#package-manager)
+    - [Tester](#tester)
+    - [Storybook](#storybook)
+  - [SASS](#sass)
+  - [Publish process](#publish-process)
+    - [Quick explanation](#quick-explanation)
+    - [Publishing](#publishing)
+  - [Run locally](#run-locally)
+  - [Questions and Comments](#questions-and-comments)
+  - [License](#license)
 
 ## Why
 
@@ -35,7 +37,7 @@ Also when I tried to install it, a lot of conflicts between versions were there.
 
 Also, it's been using `react-scripts` only to get tests set up, which limits what we can do.
 
-Then I decide to create this generator and maintain everything up-to-date and also bring some options like `storybook`, `enzyme` or `react-testing-library` and more.
+Then I decide to create this generator and maintain everything up-to-date and also bring some options like `storybook`, `react-testing-library` and more.
 
 ## Usage
 
@@ -115,7 +117,7 @@ This is really basic but allows you to start the project using either `npm` or `
 
 ### Tester
 
-For tests we have only three options: `jest + enzyme`, `jest + @testing-library/react` or `none`.
+For tests we have only three options: `jest + @testing-library/react` or `none`.
 
 When you select one of the test options, it'll be copied all configs in order to make it work and also a very basic example (`src/Button/Button.test.js`) how to test the component using the chosen library.
 
