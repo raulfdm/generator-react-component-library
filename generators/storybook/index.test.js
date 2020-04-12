@@ -14,14 +14,14 @@ const clearTmpDir = () => {
 
 const TMP_PATH = path.join(__dirname, '../../tmp');
 
-const generateDistPath = file => path.join(TMP_PATH, file);
+const generateDistPath = (file) => path.join(TMP_PATH, file);
 
 describe.only('Storybook Module', () => {
   beforeEach(() => {
     return helpers
       .run(path.join(__dirname, '../app'))
       .inDir(TMP_PATH)
-      .withPrompts({ name: 'tmp', tester: 'enzyme', storybook: true });
+      .withPrompts({ name: 'tmp', tester: 'none', storybook: true });
   });
 
   afterAll(clearTmpDir);
@@ -31,12 +31,12 @@ describe.only('Storybook Module', () => {
 
     const files = await promiseGlob(templatesFile);
     const rootFilesInTmp = files
-      .filter(file => fs.lstatSync(file).isFile())
-      .map(file => {
+      .filter((file) => fs.lstatSync(file).isFile())
+      .map((file) => {
         /* TODO: This is too hacky 🤦🏽‍, refactor pls */
         const splittedFilePath = file.split('/');
         const srcIndex = splittedFilePath.findIndex(
-          pathPart => pathPart === '.storybook',
+          (pathPart) => pathPart === '.storybook',
         );
 
         const filePath = splittedFilePath
@@ -45,7 +45,7 @@ describe.only('Storybook Module', () => {
 
         return filePath;
       })
-      .map(fileName => path.join(TMP_PATH, fileName));
+      .map((fileName) => path.join(TMP_PATH, fileName));
 
     assert.file(rootFilesInTmp);
   });
