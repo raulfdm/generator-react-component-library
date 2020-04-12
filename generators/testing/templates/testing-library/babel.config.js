@@ -15,15 +15,16 @@ module.exports = {
   plugins,
   env: {
     test: {
-      plugins: [
+      presets: [
         [
-          '@babel/plugin-transform-runtime',
+          '@babel/preset-env',
           {
-            regenerator: true,
+            targets: {
+              node: 'current',
+            },
           },
         ],
       ],
-      presets: ['@babel/preset-env', '@babel/preset-react'],
     },
   },
 };
