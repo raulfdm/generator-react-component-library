@@ -1,5 +1,17 @@
 CHANGELOG
 
+# [2.0.0](https://github.com/raulfdm/generator-react-component-library/compare/v1.5.2...v2.0.0) (2020-04-12)
+
+
+### chore
+
+* v2 ([97ad4b5](https://github.com/raulfdm/generator-react-component-library/commit/97ad4b5))
+
+
+### BREAKING CHANGES
+
+* release v2 with several changes and refactor
+
 ## [1.5.2](https://github.com/raulfdm/generator-react-component-library/compare/v1.5.1...v1.5.2) (2020-02-22)
 
 

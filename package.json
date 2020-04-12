@@ -1,6 +1,6 @@
 {
   "name": "generator-react-component-library",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
   "files": [
