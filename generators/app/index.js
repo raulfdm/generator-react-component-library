@@ -5,9 +5,9 @@ const { NPM_CHOICE, YARN_CHOICE } = require('./resources/constants');
 
 const { TESTING_LIBRARY } = require('../testing/resources/constants');
 
-const scaffoldPkgJson = require('../scaffold/resources/packageJson');
-const testingPkgJson = require('../testing/resources/packageJson');
-const storybookPkgJson = require('../storybook/resources/packageJson');
+const scaffoldPkgJson = require('../scaffold/resources/package.json');
+const testingPkgJson = require('../testing/resources/package.json');
+const storybookPkgJson = require('../storybook/resources/package.json');
 
 module.exports = class extends Generator {
   async prompting() {
