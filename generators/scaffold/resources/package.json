@@ -4,6 +4,9 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "sideEffects": [
+    "*.css"
+  ],
   "files": [
     "dist"
   ],
