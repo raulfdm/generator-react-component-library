@@ -1,29 +1,28 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+
 import Button from './Button';
-
-const defaultProps = { 'data-testid': 'button' };
-
-const mountComponent = props => {
-  const finalProps = { ...defaultProps, ...props };
-  const testingProps = render(<Button {...finalProps} />);
-
-  return { ...testingProps, usedProps: finalProps };
-};
 
 describe('<Button />', () => {
   it('renders component without break', () => {
-    const { usedProps, getByTestId } = mountComponent();
+    const { getByTestId } = render(<Button data-testid="button" />);
 
-    expect(getByTestId(usedProps['data-testid'])).toBeTruthy();
+    expect(getByTestId('button')).toMatchInlineSnapshot(`
+      <button
+        class=""
+        data-testid="button"
+      />
+    `);
   });
 
   it('triggers sent onClick function', () => {
     const onClick = jest.fn();
 
-    const { usedProps, getByTestId } = mountComponent({ onClick });
+    const { getByTestId } = render(
+      <Button data-testid="button" onClick={onClick} />,
+    );
 
-    fireEvent.click(getByTestId(usedProps['data-testid']));
+    fireEvent.click(getByTestId('button'));
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });
