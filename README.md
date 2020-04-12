@@ -8,21 +8,27 @@
 
 ## Table of Content
 
-- [Why](#why)
-- [Usage](#usage)
-- [Dependencies](#dependencies)
-- [Folder Structure Explained](#folder-structure-explained)
-- [Options Explained](#options-explained)
-  - [Package Manager](#package-manager)
-  - [Tester](#tester)
-  - [Storybook](#storybook)
-  - [Sass](#sass)
-- [Publish Process](#publish-process)
-  - [Quick explanation](#quick-explanation)
-  - [Publishing](#publishing)
-- [Run locally](#run-locally)
-- [Questions and Comments](#questions-and-comments)
-- [License](#license)
+- [React Component Library Generator](#react-component-library-generator)
+  - [Table of Content](#table-of-content)
+  - [Why](#why)
+  - [Usage](#usage)
+  - [Dependencies](#dependencies)
+  - [Folder Structure Explained](#folder-structure-explained)
+  - [Options explained](#options-explained)
+    - [Package Manager](#package-manager)
+    - [Tester](#tester)
+    - [Storybook](#storybook)
+      - [Preset](#preset)
+      - [Addons](#addons)
+      - [Story Format](#story-format)
+  - [SASS](#sass)
+  - [What about styled-components/emotion?](#what-about-styled-componentsemotion)
+  - [Publishing process](#publishing-process)
+    - [Quick explanation](#quick-explanation)
+    - [Publishing](#publishing)
+  - [Run locally](#run-locally)
+  - [Questions and Comments](#questions-and-comments)
+  - [License](#license)
 
 ## Why
 
@@ -35,7 +41,7 @@ Also when I tried to install it, a lot of conflicts between versions were there.
 
 Also, it's been using `react-scripts` only to get tests set up, which limits what we can do.
 
-Then I decide to create this generator and maintain everything up-to-date and also bring some options like `storybook`, `enzyme` or `react-testing-library` and more.
+Then I decide to create this generator and maintain everything up-to-date and also bring some options like `storybook`, `react-testing-library` and more.
 
 ## Usage
 
@@ -59,15 +65,15 @@ A couple of questions will be asked in order to generate the perfect match for y
 
 The scaffold is using:
 
-| Dependency             | version  |
-| ---------------------- | -------- |
-| react                  | v^16.8   |
-| react-dom              | v^16.8   |
-| @babel                 | v^7.x    |
-| rollup                 | v^1.6    |
-| jest                   | v^24.8.0 |
-| @testing-library/react | v^8.x    |
-| @storybook/\*          | v^5.x    |
+| Dependency             | version   |
+| ---------------------- | --------- |
+| react                  | v^16.13.x |
+| react-dom              | v^16.13.x |
+| @babel                 | v^7.x     |
+| rollup                 | v^2.6     |
+| jest                   | v^25.2.1  |
+| @testing-library/react | v^10.x    |
+| @storybook/\*          | v^5.3.x   |
 
 ## Folder Structure Explained
 
@@ -75,18 +81,25 @@ So basically when you generate a project using this generator you're gonna have 
 
 ```
 .
+├── .storybook // optional
+│   ├── index.css
+│   ├── main.js
+│   └── preview.js
 ├── dist
 │   ├── index.es.js
 │   ├── index.es.js.map
-│   ├── index.js
-│   └── index.js.map
+│   ├── index.cjs.js
+│   └── index.cjs.js.map
 ├── src
 │   ├── Button
-│   │   ├── Button.css
 │   │   ├── Button.js
+│   │   ├── Button.module.css
+│   │   ├── Button.stories.js // optional
+│   │   ├── Button.test.js // optional
 │   │   └── index.js
 │   └── index.js
 ├── .editorconfig
+├── .eslintignore
 ├── .eslintrc.js
 ├── .gitignore
 ├── babel.config.js
@@ -99,6 +112,7 @@ Where:
 
 | File/dir          | Details                                                                                  |
 | ----------------- | ---------------------------------------------------------------------------------------- |
+| .storybook        | Storybook setup                                                                          |
 | dist              | Folder where your compiled files will live                                               |
 | src               | Folder where your components will live                                                   |
 | src/index.js      | Barrel which exports all components (entry point)                                        |
@@ -115,7 +129,7 @@ This is really basic but allows you to start the project using either `npm` or `
 
 ### Tester
 
-For tests we have only three options: `jest + enzyme`, `jest + @testing-library/react` or `none`.
+For tests we have only three options: `jest + @testing-library/react` or `none`.
 
 When you select one of the test options, it'll be copied all configs in order to make it work and also a very basic example (`src/Button/Button.test.js`) how to test the component using the chosen library.
 
@@ -125,12 +139,25 @@ Both options were configured using `jest` but the principles and config. might b
 
 ### Storybook
 
-Here we're using the latest version (v5) from Storybook. It's configured to read all `.stories` files inside `src`.
+Here we're using the latest version (v5.3) from Storybook. It's configured to read all `.stories` files inside `src`.
 
 Also, it adds 2 npm scripts:
 
 - `storybook`: Which will start it at port 6006
 - `build:storybook`: Which will build your storybook inside `public/` folder.
+
+#### Preset
+
+Preset is a group of config (babel, webpack, addons) that support specific use cases.
+
+TO avoid too much extra config/custom webpack, etc., I decided to use the [`@storybook/preset-create-react-app`](https://github.com/storybookjs/presets/tree/master/packages/preset-create-react-app) which (as the name already explains), uses all the config from Create React App under-the-hood.
+
+Then it has 2 side effects:
+
+1. `react-scripts` needs to be installed;
+1. components css files, if used as `css modules`, needs to be suffixed with `<name>.module.css` ([Read more here](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/))
+
+#### Addons
 
 About addons, a couple of are been used here:
 
@@ -141,15 +168,39 @@ About addons, a couple of are been used here:
 - [`@storybook/addon-a11y`](https://www.npmjs.com/package/@storybook/addon-a11y): This is a panel which checks your story and gives you some warnings based on a11y rules;
 - [`@storybook/addon-storysource`](https://www.npmjs.com/package/@storybook/addon-storysource): A panel to check what's the source code from your story without open it in an editor.
 
+#### Story Format
+
+The example is written in Component Story Format (CSF).
+
+> [Read more here](https://storybook.js.org/docs/formats/component-story-format/)
+
 ## SASS
 
-> ⚠️ This functionality is pending to implement.
+> ⚠️ This functionality isn't present
 
-To make it work you only need to add `node-sass` and `rollup-plugin-postcss` will take care of then for you.
+To work with SASS, there are two things to keep in mind:
 
-The problem is when you're using `storybook`. I left a rule inside `.storybook/webpack.config.js` commented with the needed code to make it work. Just uncomment it and install all dependencies which it's been used there (e.g. `autoprefixer`, `style-loader`, `css-loader`, etc.).
+1. it needs to work with storybook.
+   Since storybook uses `react-scripts`, it won't be a problem.
+2. you need to add this configuration into postCSS configuration. [Check the necessary steps here](https://github.com/egoist/rollup-plugin-postcss#with-sassstylusless)
 
-## Publish process
+## What about styled-components/emotion?
+
+Personally, I'd rather always use such libraries like these.
+
+Since it's kinda trivial (they have pretty good documentation about this), I even didn't add here.
+
+Always keep in mind that you need to provide extra information how to setup your library with SSR.
+
+Also, if you need `symlink` your library to test locally, having libraries such `styled-component` will demand some extra steps ([read more here](https://styled-components.com/docs/faqs#how-can-i-fix-issues-when-using-npm-link-or-yarn-link)). My advise is, if you need to link your library:
+
+1. link root level;
+2. navigate into `node_modules/react` and also link it;
+3. go inside your project and use both your library link and react.
+
+The reason for that is because libraries such `React` are supposed to be a singleton and when linking, there will be 2 react versions in the same project.
+
+## Publishing process
 
 It's time to do the most important thing about shared components: publish them.
 
@@ -160,7 +211,7 @@ As I explained before, all your files will be compiled inside the `dist` folder.
 `package.json` is configured to distribute your bundles in two ways:
 
 - ES Modules. An `index.es.js` file will be created and it'll be available via `module` field into `package.json`.
-- CommonJS. An `index.js` file will be created and it'll be available via `main` field into `package.json`.
+- CommonJS. An `index.cjs.js` file will be created and it'll be available via `main` field into `package.json`.
 
 Rollup provides some description of why `ES Module` is better than `CommonJS`:
 

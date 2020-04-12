@@ -89,3 +89,4 @@ typings/
 
 # Others
 dist/
+test-lib/
