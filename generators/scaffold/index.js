@@ -1,6 +1,6 @@
 const Generator = require('yeoman-generator');
 
-const { ROOT_FILES } = require('./resources/constants');
+const { ROOT_FILES } = require('../shared/constants');
 
 module.exports = class extends Generator {
   writing() {

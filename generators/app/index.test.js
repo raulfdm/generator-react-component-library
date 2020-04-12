@@ -8,7 +8,7 @@ const glob = require('glob');
 
 const promiseGlob = promisify(glob);
 
-const { ROOT_FILES } = require('../scaffold/resources/constants');
+const { ROOT_FILES } = require('../shared/constants');
 
 const clearTmpDir = () => {
   rimraf.sync(TMP_PATH);
