@@ -8,11 +8,11 @@ const glob = require('glob');
 
 const promiseGlob = promisify(glob);
 
+const TMP_PATH = path.join(__dirname, '../../tmp');
+
 const clearTmpDir = () => {
   rimraf.sync(TMP_PATH);
 };
-
-const TMP_PATH = path.join(__dirname, '../../tmp');
 
 const generateDistPath = (file) => path.join(TMP_PATH, file);
 
