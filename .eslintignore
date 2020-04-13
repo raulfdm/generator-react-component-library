@@ -1,0 +1,6 @@
+test-lib/
+examples/
+.history/
+# generators/scaffold/templates/
+# generators/storybook/templates/
+# generators/testing/templates/

@@ -62,7 +62,7 @@ module.exports = class extends Generator {
   }
 
   /* Internals */
-  _askFor() {
+  async _askFor() {
     const prompts = [
       {
         type: 'input',
@@ -70,7 +70,9 @@ module.exports = class extends Generator {
         message: 'Your project name',
         validate(input) {
           return new Promise((resolve, reject) =>
-            isEmpty(input) ? reject('Project name is required') : resolve(true),
+            isEmpty(input)
+              ? reject(new Error('Project name is required'))
+              : resolve(true),
           );
         },
       },
@@ -108,9 +110,8 @@ module.exports = class extends Generator {
       },
     ];
 
-    return this.prompt(prompts).then((props) => {
-      this.props = merge(this.props, props);
-    });
+    const props = await this.prompt(prompts);
+    this.props = merge(this.props, props);
   }
 
   _generateDestPath(path = '') {
