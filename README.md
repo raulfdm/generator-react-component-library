@@ -1,3 +1,11 @@
+# DEPRECATION NOTE
+
+When I've created this project I was lacking good component library creators. If you need to create a component library in 2020 (and beyond) I would strongly suggest you take a look at [`TSDX`](https://github.com/formium/tsdx).
+
+This project brings all you need to create npm packages (including react components package), like build, test, lint, github pipeline, storybook and much more all out of the box.
+
+
+
 # React Component Library Generator
 
 > All you need to create your shareable React Component Library
